@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSelect">#F8E71C</color>
+    <color name="colorPress">#555555</color>
+    <color name="colorTransparent">#00000000</color>
+</resources>

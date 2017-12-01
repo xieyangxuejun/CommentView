@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="CommentListView">
+        <attr name="item_normal_color" format="color"/>
+        <attr name="item_select_color" format="color"/>
+    </declare-styleable>
+</resources>

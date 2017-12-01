@@ -1,0 +1,11 @@
+<resources>
+    <!--评论view-->
+    <declare-styleable name="CommentSpanTextView">
+        <attr name="text_press_color" format="color"/>
+        <attr name="text_select_color" format="color"/>
+        <!--@用户-->
+        <attr name="text_cashtag_color" format="color"/>
+        <!--#用户-->
+        <attr name="text_hashtag_color" format="color"/>
+    </declare-styleable>
+</resources>

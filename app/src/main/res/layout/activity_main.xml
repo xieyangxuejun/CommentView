@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.foretree.commentview.MainActivity">
+
+    <com.foretree.commment.CommentSpanTextView
+        android:id="@+id/tv_comment"
+        tools:text="djdjdjdjdjdjdjdjdjdjdj"
+        app:text_select_color="@color/colorTheme"
+        app:text_press_color="@color/colorMainBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</ScrollView>
