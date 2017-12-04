@@ -13,19 +13,16 @@ import java.util.regex.Matcher;
  */
 public class Extractor {
     public static class Entity {
-        public enum Type {
-            URL, HASHTAG, MENTION, CASHTAG
-        }
 
-        protected int start;
-        protected int end;
-        protected final String value;
+        public int start;
+        public int end;
+        public final String value;
         // listSlug is used to store the list portion of @mention/list.
-        protected final String listSlug;
-        protected final Type type;
+        public final String listSlug;
+        public final Type type;
 
-        protected String displayURL = null;
-        protected String expandedURL = null;
+        public String displayURL = null;
+        public String expandedURL = null;
 
         public Entity(int start, int end, String value, String listSlug, Type type) {
             this.start = start;
@@ -227,13 +224,13 @@ public class Extractor {
             String after = text.substring(matcher.end());
             if (!Regex.INVALID_MENTION_MATCH_END.matcher(after).find()) {
                 if (matcher.group(Regex.VALID_MENTION_OR_LIST_GROUP_LIST) == null) {
-                    extracted.add(new Entity(matcher, Entity.Type.MENTION, Regex.VALID_MENTION_OR_LIST_GROUP_USERNAME));
+                    extracted.add(new Entity(matcher, Type.MENTION, Regex.VALID_MENTION_OR_LIST_GROUP_USERNAME));
                 } else {
                     extracted.add(new Entity(matcher.start(Regex.VALID_MENTION_OR_LIST_GROUP_USERNAME) - 1,
                             matcher.end(Regex.VALID_MENTION_OR_LIST_GROUP_LIST),
                             matcher.group(Regex.VALID_MENTION_OR_LIST_GROUP_USERNAME),
                             matcher.group(Regex.VALID_MENTION_OR_LIST_GROUP_LIST),
-                            Entity.Type.MENTION));
+                            Type.MENTION));
                 }
             }
         }
@@ -321,7 +318,7 @@ public class Extractor {
                 end = start + url.length();
             }
 
-            urls.add(new Entity(start, end, url, Entity.Type.URL));
+            urls.add(new Entity(start, end, url, Type.URL));
         }
 
         return urls;
@@ -389,7 +386,7 @@ public class Extractor {
         while (matcher.find()) {
             String after = text.substring(matcher.end());
             if (!Regex.INVALID_HASHTAG_MATCH_END.matcher(after).find()) {
-                extracted.add(new Entity(matcher, Entity.Type.HASHTAG, Regex.VALID_HASHTAG_GROUP_TAG));
+                extracted.add(new Entity(matcher, Type.HASHTAG, Regex.VALID_HASHTAG_GROUP_TAG));
             }
         }
 
@@ -404,7 +401,7 @@ public class Extractor {
                 Iterator<Entity> it = extracted.iterator();
                 while (it.hasNext()) {
                     Entity entity = it.next();
-                    if (entity.getType() != Entity.Type.HASHTAG) {
+                    if (entity.getType() != Type.HASHTAG) {
                         it.remove();
                     }
                 }
@@ -455,7 +452,7 @@ public class Extractor {
         Matcher matcher = Regex.VALID_CASHTAG.matcher(text);
 
         while (matcher.find()) {
-            extracted.add(new Entity(matcher, Entity.Type.CASHTAG, Regex.VALID_CASHTAG_GROUP_CASHTAG));
+            extracted.add(new Entity(matcher, Type.CASHTAG, Regex.VALID_CASHTAG_GROUP_CASHTAG));
         }
 
         return extracted;

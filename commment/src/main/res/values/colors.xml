@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorSelect">#F8E71C</color>
+    <color name="colorTheme">#F8E71C</color>
+    <color name="colorSelect">#ff7474</color>
     <color name="colorPress">#555555</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorText">#999999</color>
+    <color name="colorLoading">#f3f3f3</color>
 </resources>

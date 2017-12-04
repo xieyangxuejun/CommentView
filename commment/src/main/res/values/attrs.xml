@@ -8,4 +8,9 @@
         <!--#用户-->
         <attr name="text_hashtag_color" format="color"/>
     </declare-styleable>
+
+    <!--弹窗输入-->
+    <declare-styleable name="CommentEditText">
+        <attr name="background" format="reference"/>
+    </declare-styleable>
 </resources>

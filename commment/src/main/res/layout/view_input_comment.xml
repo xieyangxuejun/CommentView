@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <android.support.design.widget.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/textInputLayout_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        app:hintEnabled="false">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/textInputEt_comment_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/corner_comment_box"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/text_say_something"
+            android:maxLines="4"
+            android:paddingBottom="8dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="8dp"
+            android:textColorHint="@color/colorText"
+            android:textCursorDrawable="@drawable/cursor_color_primary"
+            android:textSize="11.5sp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+</layout>
+

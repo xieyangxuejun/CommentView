@@ -9,8 +9,9 @@ import android.text.Spanned;
 
 public class Constants {
     final String TAG = BuildConfig.APPLICATION_ID;
-    public final static String TEST_TEXT = "日本热 @日本語ハッシュタグ 我是谢杨学君 @小罗 @123 #الجزائر @abc 你好呀...大帅哥 " +
-            "@zhangshuai 来参加 #邓师傅partty #谢劳版外卖 走起....... @长靖 吃鸡吃鸡0-0 url www.baidu.com";
+    public final static String TEST_TEXT = "日本热 @日本語ハッシュタグ 我是谢杨学君 @小罗 @123 #الجزائر @abc 你好呀.大帅哥 " +
+            "@zhangshuai 来参加 #邓师傅partty #谢劳版外卖 走起 @长靖 吃鸡吃鸡0-0 url http://t.co" +
+            " www.twitter.com/alibaba www.yahoo.co.jp t.co/blahblah www.poloshirts.uk.com";
     public final static int SPAN_FLAGS = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
     public final static String EMPTY = " ";
     public final static String HASH_TAG = "#";

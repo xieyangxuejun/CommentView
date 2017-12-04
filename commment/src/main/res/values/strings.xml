@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">commment</string>
+    <string name="text_say_something">来说点什么</string>
 </resources>

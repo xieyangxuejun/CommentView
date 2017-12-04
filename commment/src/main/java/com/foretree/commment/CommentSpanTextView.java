@@ -5,11 +5,10 @@ import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.foretree.commment.bean.ICommentEntity;
-import com.foretree.commment.listener.OnCommentTouchListener;
+import com.foretree.commment.callback.OnCommentTouchListener;
 import com.foretree.commment.twitter.Extractor;
 import com.foretree.commment.util.SpanUtil;
 
@@ -76,19 +75,15 @@ public class CommentSpanTextView extends AppCompatTextView {
         String name = item.getNickName();
         String toReplyName = item.getToNickName();
         String content = item.getContent();
-        List<Extractor.Entity> entities = mExtractor.extractMentionsOrListsWithIndices(content);
-        List<Extractor.Entity> extractHashtags = mExtractor.extractHashtagsWithIndices(content);
-        for (int i = 0; i < entities.size(); i++) {
-            Extractor.Entity en = entities.get(i);
-            Log.d("xy==>", "setText: " + en.getValue() + ",start=" + en.getStart() + ", end=" + en.getEnd() + ", type=" + en.getType());
-        }
+        List<Extractor.Entity> cashTagsEntities = mExtractor.extractMentionsOrListsWithIndices(content);
+        List<Extractor.Entity> HashTagsEntities = mExtractor.extractHashtagsWithIndices(content);
 
-        for (int i = 0; i < extractHashtags.size(); i++) {
-            Extractor.Entity en = extractHashtags.get(i);
-            Log.d("xy==>", "setText: " + en.getValue() + ",start=" + en.getStart() + ", end=" + en.getEnd() + ", type=" + en.getType());
-        }
-        setText(SpanUtil.getCommentSpan(name, toReplyName, content, mSelectColor, mItemTouchListener));
-        //监听
+        setText(SpanUtil.getCommentSpan(
+                name, toReplyName, content,
+                mSelectColor, cashTagsEntities,HashTagsEntities,
+                mItemTouchListener));
+
+        //单击
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +94,7 @@ public class CommentSpanTextView extends AppCompatTextView {
                 }
             }
         });
+        //长按
         setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

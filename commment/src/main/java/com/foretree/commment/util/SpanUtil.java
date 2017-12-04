@@ -2,6 +2,7 @@ package com.foretree.commment.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.Browser;
 import android.support.annotation.NonNull;
@@ -17,8 +18,11 @@ import android.view.View;
 
 import com.foretree.commment.Constants;
 import com.foretree.commment.TouchableSpan;
-import com.foretree.commment.listener.OnCommentTouchListener;
+import com.foretree.commment.callback.OnCommentTouchListener;
+import com.foretree.commment.twitter.Extractor;
+import com.foretree.commment.twitter.Type;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,28 +33,80 @@ import java.util.regex.Pattern;
  */
 public class SpanUtil {
 
+
     /**
-     * 获取评论改变字体的..
+     * 获取评论评论中加入@和#的文字解析
      * @param name
      * @param toReplyName
      * @param content
      * @param selectColor
+     * @param cashTags
+     * @param hashTags
      * @param callback
      * @return
      */
-    @NonNull
+    public static Spannable getCommentSpan(String name, String toReplyName,
+                                           String content, int selectColor,
+                                           @NonNull List<Extractor.Entity> cashTags,
+                                           @NonNull List<Extractor.Entity> hashTags,
+                                           OnCommentTouchListener callback) {
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        //name
+        ssb.append(getClickableSpan(name, selectColor, callback));
+        if (!TextUtils.isEmpty(toReplyName)) {
+            //~回复~
+            ssb.append(Constants.REPLY_TEXT);
+            ssb.append(getClickableSpan(toReplyName, selectColor, callback));
+        }
+        //:
+        ssb.append(Constants.COLON);
+        //content
+        ssb.append(getCommentSpan(content, selectColor, cashTags, hashTags, callback));
+        return ssb;
+    }
+
+    public static SpannableString getCommentSpan(String content, int selectColor,
+                                                 @NonNull List<Extractor.Entity> cashTags,
+                                                 @NonNull List<Extractor.Entity> hashTags,
+                                                 OnCommentTouchListener callback) {
+        SpannableString ss = new SpannableString(content);
+        //@
+        setListSpan(selectColor, cashTags, callback, ss);
+        //#
+        setListSpan(selectColor, hashTags, callback, ss);
+        return ss;
+    }
+
+    /**
+     * 描述: 每一个spannable都需要单独的spannable对象设置,
+     * 不然多个循环使用同一个只有last现实.
+     * @param selectColor
+     * @param list
+     * @param callback
+     * @param ss
+     */
+    private static void setListSpan(int selectColor, @NonNull List<Extractor.Entity> list,
+                                    OnCommentTouchListener callback, SpannableString ss) {
+        for (Extractor.Entity en : list) {
+            TouchableSpan touchableSpan = new TouchableSpan(en.getType(), en.getValue(), callback);
+            ss.setSpan(touchableSpan, en.getStart(), en.getEnd(), Constants.SPAN_FLAGS);
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(selectColor);
+            ss.setSpan(foregroundColorSpan, en.getStart(), en.getEnd(), Constants.SPAN_FLAGS);
+        }
+    }
+
+
     public static Spannable getCommentSpan(String name, String toReplyName, String content, int selectColor, OnCommentTouchListener callback) {
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(getClickableSpan(name, selectColor, callback));
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        ssb.append(getClickableSpan(name, selectColor, callback));
 
         if (!TextUtils.isEmpty(toReplyName)) {
-            builder.append(Constants.REPLY_TEXT);
-            builder.append(getClickableSpan(toReplyName, selectColor, callback));
+            ssb.append(Constants.REPLY_TEXT);
+            ssb.append(getClickableSpan(toReplyName, selectColor, callback));
         }
-        builder.append(Constants.COLON);
-        //转换表情字符
-        builder.append(formatUrlString(content));
-        return builder;
+
+        ssb.append(Constants.COLON);
+        return ssb;
     }
 
     /**
@@ -76,7 +132,7 @@ public class SpanUtil {
      * @param end   结束位置 )
      */
     public static void setBoldLinkSpan(Spannable SS, int start, int end) {
-        SS.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start, end, Constants.SPAN_FLAGS);
+        SS.setSpan(new StyleSpan(Typeface.BOLD), start, end, Constants.SPAN_FLAGS);
     }
 
     public static Spannable getBoldSpan(String content) {
@@ -84,7 +140,7 @@ public class SpanUtil {
             return null;
         }
         SpannableString spannableString = new SpannableString(content);
-        spannableString.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, content.length(), Constants.SPAN_FLAGS);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, content.length(), Constants.SPAN_FLAGS);
         return spannableString;
     }
 
@@ -97,14 +153,12 @@ public class SpanUtil {
      */
     @NonNull
     public static SpannableString getClickableSpan( String textStr, int color, OnCommentTouchListener callback) {
-        SpannableString subjectSpanText = new SpannableString(textStr);
-        int length = subjectSpanText.length();
-        TouchableSpan touchableSpan = new TouchableSpan(textStr);
-        touchableSpan.setCallback(callback);
-        subjectSpanText.setSpan(touchableSpan, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString ss = new SpannableString(textStr);
+        TouchableSpan touchableSpan = new TouchableSpan(Type.NONE, textStr, callback);
+        ss.setSpan(touchableSpan, 0, textStr.length(), Constants.SPAN_FLAGS);
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
-        subjectSpanText.setSpan(foregroundColorSpan, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return subjectSpanText;
+        ss.setSpan(foregroundColorSpan, 0, textStr.length(), Constants.SPAN_FLAGS);
+        return ss;
     }
 
     public static SpannableStringBuilder formatUrlString(String contentStr){
